@@ -6,12 +6,12 @@ const fs = require('fs');
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
 
-  const baseUrl = 'https://www.digikala.com/search/category-dog-dry-food/';
+  const baseUrl = 'https://www.digikala.com/search/category-pet-food-and-nutritional-supplement/';
   const products = [];
-  const maxPages = 239; // Set the maximum number of pages to crawl
+  const maxPages = 100; // Set the maximum number of pages to crawl
   const sortParameter = '&sort=7';
 
-  for (let pageNumber = 1; pageNumber <= maxPages; pageNumber++) {
+  for (let pageNumber = 51; pageNumber <= maxPages; pageNumber++) {
     const currentPageUrl = `${baseUrl}?page=${pageNumber}${sortParameter}`;
     console.log(`Crawling page: ${currentPageUrl}`);
 
@@ -20,13 +20,13 @@ const fs = require('fs');
 
     // Wait for the loading spinner to disappear
     try {
-      await page.waitForSelector('.loading-spinner', { hidden: true, timeout: 10000 }); // Adjust selector and timeout as needed
+      await page.waitForSelector('.loading-spinner', { hidden: true, timeout: 100000 }); // Adjust selector and timeout as needed
     } catch (error) {
       console.log(`Loading spinner not found or took too long to disappear on page ${pageNumber}`);
     }
 
     // Wait for the products container to be fully loaded
-    await page.waitForSelector('div.product-list_ProductList__item__LiiNI', { visible: true, timeout: 10000 });
+    await page.waitForSelector('div.product-list_ProductList__item__LiiNI', { visible: true, timeout: 100000 });
 
     const content = await page.content();
     const $ = cheerio.load(content);
@@ -38,13 +38,20 @@ const fs = require('fs');
       const htmlContent = $(element).html();
       const $element = cheerio.load(htmlContent);
 
+      const productName = $element('h3.ellipsis-2.text-body2-strong.text-neutral-700.styles_VerticalProductCard__productTitle__6zjjN').text().trim();
+      const price = $element('span[data-testid="price-final"]').text().trim();
+      const productImg = $element('img.w-full.rounded-medium.inline-block').attr('src');
       const href = $element('a').attr('href');
 
-      products.push({
-        id: products.length, // Unique ID across all pages
-        html: htmlContent,
-        href: href ? `https://www.digikala.com${href}` : null,
-      });
+      if (productName && price && productImg) {
+        products.push({
+          id: products.length, // Unique ID across all pages
+          name: productName,
+          price: price,
+          image: productImg,
+          href: href ? `https://www.digikala.com${href}` : null,
+        });
+      }
     });
 
     console.log(`Page ${pageNumber} crawled successfully.`);
