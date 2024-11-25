@@ -6,12 +6,12 @@ const fs = require('fs');
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
 
-  const baseUrl = 'https://www.digikala.com/search/category-pet-food-and-nutritional-supplement/';
+  const baseUrl = 'https://www.digikala.com/search/category-cat-dry-foods/';
   const products = [];
-  const maxPages = 19; // Set the maximum number of pages to crawl
+  const maxPages = 100; // Set the maximum number of pages to crawl
   const sortParameter = '&sort=7';
 
-  for (let pageNumber = 1; pageNumber <= maxPages; pageNumber++) {
+  for (let pageNumber = 51; pageNumber <= maxPages; pageNumber++) {
     const currentPageUrl = `${baseUrl}?page=${pageNumber}${sortParameter}`;
     console.log(`Crawling page: ${currentPageUrl}`);
 
