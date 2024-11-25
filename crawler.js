@@ -8,10 +8,10 @@ const fs = require('fs');
 
   const baseUrl = 'https://www.digikala.com/search/category-pet-food-and-nutritional-supplement/';
   const products = [];
-  const maxPages = 100; // Set the maximum number of pages to crawl
+  const maxPages = 19; // Set the maximum number of pages to crawl
   const sortParameter = '&sort=7';
 
-  for (let pageNumber = 51; pageNumber <= maxPages; pageNumber++) {
+  for (let pageNumber = 1; pageNumber <= maxPages; pageNumber++) {
     const currentPageUrl = `${baseUrl}?page=${pageNumber}${sortParameter}`;
     console.log(`Crawling page: ${currentPageUrl}`);
 
