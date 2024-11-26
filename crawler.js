@@ -1,33 +1,39 @@
-const puppeteer = require('puppeteer');
+const { chromium } = require('playwright'); // Importing Playwright's chromium browser
 const cheerio = require('cheerio');
 const fs = require('fs');
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: true });
+  // Launch the Chromium browser instance
+  const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
 
-  const baseUrl = 'https://www.digikala.com/search/category-cat-dry-foods/';
-  const products = [];
-  const maxPages = 100; // Set the maximum number of pages to crawl
+  const baseUrl = 'https://www.digikala.com/search/category-dog-supplements/';
   const sortParameter = '&sort=7';
+  const products = [];
+  const maxPages = 10; // Set the maximum number of pages to crawl
 
-  for (let pageNumber = 51; pageNumber <= maxPages; pageNumber++) {
+  for (let pageNumber = 1; pageNumber <= maxPages; pageNumber++) {
     const currentPageUrl = `${baseUrl}?page=${pageNumber}${sortParameter}`;
     console.log(`Crawling page: ${currentPageUrl}`);
 
     // Navigate to the current page
-    await page.goto(currentPageUrl, { waitUntil: 'networkidle2' });
+    await page.goto(currentPageUrl, { waitUntil: 'load' });
 
-    // Wait for the loading spinner to disappear
+    // Wait for the loading spinner to disappear (adjust selector and timeout if needed)
     try {
-      await page.waitForSelector('.loading-spinner', { hidden: true, timeout: 100000 }); // Adjust selector and timeout as needed
+      await page.waitForSelector('.loading-spinner', { hidden: true, timeout: 20000 });
     } catch (error) {
       console.log(`Loading spinner not found or took too long to disappear on page ${pageNumber}`);
     }
 
     // Wait for the products container to be fully loaded
-    await page.waitForSelector('div.product-list_ProductList__item__LiiNI', { visible: true, timeout: 100000 });
+    try {
+      await page.waitForSelector('div.product-list_ProductList__item__LiiNI', { visible: true, timeout: 10000 });
+    } catch (error) {
+      console.log(`Products not found or took too long to load on page ${pageNumber}`);
+    }
 
+    // Get the page content after loading
     const content = await page.content();
     const $ = cheerio.load(content);
 
@@ -40,15 +46,31 @@ const fs = require('fs');
 
       const productName = $element('h3.ellipsis-2.text-body2-strong.text-neutral-700.styles_VerticalProductCard__productTitle__6zjjN').text().trim();
       const price = $element('span[data-testid="price-final"]').text().trim();
-      const productImg = $element('img.w-full.rounded-medium.inline-block').attr('src');
+
+      // Extract the picture source
+      const picture = $element('picture');
+
+      // Look for a <source> tag with type="image/webp"
+      let imageUrl = '';
+      const webpSrc = picture.find('source[type="image/webp"]').attr('srcset');
+      if (webpSrc) {
+        imageUrl = webpSrc; // Use the webp image if available
+      } else {
+        // Fallback to <source> with type="image/jpeg" if webp is not found
+        const jpegSrc = picture.find('source[type="image/jpeg"]').attr('srcset');
+        if (jpegSrc) {
+          imageUrl = jpegSrc; // Use jpeg image if webp is not available
+        }
+      }
+
       const href = $element('a').attr('href');
 
-      if (productName && price && productImg) {
+      if (productName && price && imageUrl) {
         products.push({
           id: products.length, // Unique ID across all pages
           name: productName,
           price: price,
-          image: productImg,
+          image: imageUrl,
           href: href ? `https://www.digikala.com${href}` : null,
         });
       }
