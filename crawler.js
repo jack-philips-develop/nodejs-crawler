@@ -7,7 +7,7 @@ const fs = require('fs');
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
 
-  const baseUrl = 'https://www.digikala.com/search/category-dog-supplements/';
+  const baseUrl = 'https://www.digikala.com/search/category-dog-wet-food-and-pouch/';
   const sortParameter = '&sort=7';
   const products = [];
   const maxPages = 10; // Set the maximum number of pages to crawl
