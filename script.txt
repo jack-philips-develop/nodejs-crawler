@@ -5,14 +5,14 @@ i have a data in a json file that contains some information of some products tha
     "id": 56,
     "name": "غذای خشک سگ فیدار پاتیرا مدل Mini Adult وزن 10 کیلوگرم",
     "price": "۹۵۰,۰۰۰",
-    "image": "https://dkstatics-public.digikala.com/digikala-products/5192676.jpg?x-oss-process=image/resize,m_lfit,h_300,w_300/quality,q_80",
+    "image": "https://pixipetstore.com/wp-content/uploads/uploaded_images/5192676.jpg?x-oss-process=image/resize,m_lfit,h_300,w_300/quality,q_80",
     "href": "https://www.digikala.com/product/dkp-1092822/%D8%BA%D8%B0%D8%A7%DB%8C-%D8%AE%D8%B4%DA%A9-%D8%B3%DA%AF-%D9%81%DB%8C%D8%AF%D8%A7%D8%B1-%D9%BE%D8%A7%D8%AA%DB%8C%D8%B1%D8%A7-%D9%85%D8%AF%D9%84-mini-adult-%D9%88%D8%B2%D9%86-10-%DA%A9%DB%8C%D9%84%D9%88%DA%AF%D8%B1%D9%85/"
   },
   {
     "id": 57,
     "name": "غذا خشک سگ رویال کنین مدل renal وزن 2 کیلوگرم",
     "price": "۳,۳۹۹,۰۰۰",
-    "image": "https://dkstatics-public.digikala.com/digikala-products/988d060a003de2bac5fe14ec80a55c3b272fe45e_1634207111.jpg?x-oss-process=image/resize,m_lfit,h_300,w_300/quality,q_80",
+    "image": "https://pixipetstore.com/wp-content/uploads/uploaded_images/988d060a003de2bac5fe14ec80a55c3b272fe45e_1634207111.jpg?x-oss-process=image/resize,m_lfit,h_300,w_300/quality,q_80",
     "href": "https://www.digikala.com/product/dkp-6752865/%D8%BA%D8%B0%D8%A7-%D8%AE%D8%B4%DA%A9-%D8%B3%DA%AF-%D8%B1%D9%88%DB%8C%D8%A7%D9%84-%DA%A9%D9%86%DB%8C%D9%86-%D9%85%D8%AF%D9%84-renal-%D9%88%D8%B2%D9%86-2-%DA%A9%DB%8C%D9%84%D9%88%DA%AF%D8%B1%D9%85/"
   },
 ...
