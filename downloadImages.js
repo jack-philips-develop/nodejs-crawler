@@ -10,11 +10,7 @@ async function downloadImage(url, imagePath) {
       url,
       responseType: 'stream'
     });
-
-    // Create a write stream to save the image
     const writer = fs.createWriteStream(imagePath);
-
-    // Pipe the response stream into the file
     response.data.pipe(writer);
 
     writer.on('finish', () => {
@@ -30,25 +26,21 @@ async function downloadImage(url, imagePath) {
 }
 
 function getImageFilename(imageUrl) {
-  // Extract the filename from the image URL (before any query parameters)
-  const urlWithoutQuery = imageUrl.split('?')[0]; // Remove query parameters
-  const filename = path.basename(urlWithoutQuery); // Get the last part of the URL (filename)
+  const urlWithoutQuery = imageUrl.split('?')[0]; 
+  const filename = path.basename(urlWithoutQuery);
   return filename;
 }
 
 async function downloadImages() {
-  // Loop through each product and download its image
   for (const product of products) {
     const imageUrl = product.image;
-    const imageFileName = getImageFilename(imageUrl); // Extract the image filename from URL
+    const imageFileName = getImageFilename(imageUrl);
     const imagePath = path.join(__dirname, 'images', imageFileName);
 
-    // Create 'images' directory if it doesn't exist
     if (!fs.existsSync(path.join(__dirname, 'images'))) {
       fs.mkdirSync(path.join(__dirname, 'images'));
     }
 
-    // Download the image
     await downloadImage(imageUrl, imagePath);
   }
 }
